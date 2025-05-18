@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import space.kuikuioj.kuikuiojbankendcommon.exception.BusinessException;
+import space.kuikuioj.kuikuiojbankendmodel.entity.User;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

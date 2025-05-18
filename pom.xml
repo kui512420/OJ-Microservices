@@ -19,20 +19,14 @@
         <module>kuikuioj-bankend-question</module>
         <module>kuikuioj-bankend-model</module>
         <module>kuikuioj-bankend-common</module>
+        <module>kuikuioj-bankend-service-client</module>
+        <module>kuikuioj-bankend-questionsubmit</module>
+        <module>kuikuioj-bankend-competition</module>
+        <module>kuikuioj-bankend-ai</module>
+        <module>kuikuioj-bankend-codesandbox</module>
+        <module>kuikuioj-bankend-gateway</module>
     </modules>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
@@ -65,16 +59,11 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>1.18.30</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -132,8 +121,14 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.6</version>
+            <version>2.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
         <!--   jackson依赖     -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

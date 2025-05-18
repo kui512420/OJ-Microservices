@@ -1,5 +1,7 @@
 package space.kuikuioj.kuikuiojbankendcommon.back;
 
+import lombok.Data;
+
 /**
  * @author kuikui
  * @date 2025/3/15 16:24

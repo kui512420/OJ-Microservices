@@ -33,12 +33,14 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     // 定义不需要拦截的路径
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
-            "/api/user/login", "/api/user/register", "/api/user/captcha", "/api/user/email","/api/file/userheader"
+            "/api/user/login", "/api/user/register", "/api/user/captcha", "/api/user/email","/api/user/file/userheader"
+            ,"/api/user/rank","/api/submit","/api/question/inner/getCount"
     );
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
+        System.out.println(requestURI);
         // 检查是否是不需要拦截的路径
         for (String path : EXCLUDED_PATHS) {
             if (requestURI.startsWith(path)) {

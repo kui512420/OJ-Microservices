@@ -1,5 +1,6 @@
 package space.kuikuioj.kuikuiojbankendcommon.config;
 
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,14 +13,10 @@ import space.kuikuioj.kuikuiojbankendcommon.utils.RedisSetTokenExample;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    // 注入 RedisSetTokenExample 和 JwtLoginUtils
-    private final RedisSetTokenExample redisSetTokenExample;
-    private final JwtLoginUtils jwtLoginUtils;
-
-    public WebConfig(RedisSetTokenExample redisSetTokenExample, JwtLoginUtils jwtLoginUtils) {
-        this.redisSetTokenExample = redisSetTokenExample;
-        this.jwtLoginUtils = jwtLoginUtils;
-    }
+    @Resource
+    private RedisSetTokenExample redisSetTokenExample;
+    @Resource
+    private JwtLoginUtils jwtLoginUtils;
 
     // 将 LoginInterceptor 配置为 Bean
     @Bean

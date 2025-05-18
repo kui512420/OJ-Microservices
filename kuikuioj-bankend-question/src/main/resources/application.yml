@@ -1,0 +1,58 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api/question
+# spring 配置
+spring:
+  application:
+    name: service-question
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+    url: jdbc:mysql://localhost:3306/kuikuioj
+  data:
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
+
+# swagger配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: space.kuikuioj.kuikuibankendquestion.controller
+
+# 持久层设置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete #
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+# 代码沙箱设置
+code:
+  default: example
+# jwt设置
+jwt:
+  sign: 512420
+  timeAccess: 2592000000
