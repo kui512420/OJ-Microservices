@@ -16,6 +16,7 @@ import space.kuikuioj.kuikuibankenduser.service.UserService;
 import space.kuikuioj.kuikuiojbankendcommon.utils.JwtLoginUtils;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,9 +37,9 @@ public class FilleController {
     @Resource
     private UserService userService;
 
-    private final static String USER_HEADER_PATH = "C:\\Users\\30767\\Desktop\\git\\userHeader\\";
+    private final static String USER_HEADER_PATH = System.getProperty("user.dir") + File.separator + "data" + File.separator + "userHeader" + File.separator;
 
-    private final static String QUESTION_CONTENT_PATH = "C:\\Users\\30767\\Desktop\\git\\questionContent\\";
+    private final static String QUESTION_CONTENT_PATH = System.getProperty("user.dir") + File.separator + "data" + File.separator + "questionContent" + File.separator;
     /**
      * @todo 上传头像
      * @param file

@@ -14,9 +14,14 @@ import space.kuikuioj.kuikuiojbankendmodel.dto.QuestionRequest;
 import space.kuikuioj.kuikuiojbankendmodel.entity.Question;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionListVo;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionViewVo;
+import space.kuikuioj.kuikuiojbankendmodel.vo.TagCountVO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +35,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Resource
     private QuestionMapper questionMapper;
     private Question question;
+
+    @Resource
+    private ObjectMapper objectMapper;
 
     @Override
     public Page<QuestionListVo> selectAllQuestion(QuestionRequest questionRequest) {
@@ -145,6 +153,43 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public List<Question> queryQuestions() {
         return questionMapper.selectList(null);
+    }
+
+    @Override
+    public List<TagCountVO> getTop4PopularTags() {
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("tags").eq("isDelete", 0);
+        List<Question> questions = list(queryWrapper);
+
+        if (questions == null || questions.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Map<String, Long> tagCounts = new HashMap<>();
+        for (Question question : questions) {
+            String tagsJson = question.getTags();
+            if (tagsJson != null && !tagsJson.trim().isEmpty() && !"[]".equals(tagsJson.trim())) {
+                try {
+                    List<String> currentTags = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+                    if (currentTags != null) {
+                        for (String tag : currentTags) {
+                            if (tag != null && !tag.trim().isEmpty()) {
+                                tagCounts.put(tag.trim(), tagCounts.getOrDefault(tag.trim(), 0L) + 1);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // Log error: logger.error("Failed to parse tags JSON: {} for question id: {}", tagsJson, question.getId(), e);
+                    // Depending on policy, either continue or rethrow as a custom business exception
+                }
+            }
+        }
+
+        return tagCounts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(4)
+                .map(entry -> new TagCountVO(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }
 

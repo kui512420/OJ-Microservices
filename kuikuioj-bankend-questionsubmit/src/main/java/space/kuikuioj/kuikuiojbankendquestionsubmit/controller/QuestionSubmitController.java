@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.Resource;
+import jakarta.annotation.PostConstruct;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import space.kuikuioj.kuikuiojbankendcommon.back.BaseResponse;
@@ -32,6 +33,18 @@ public class QuestionSubmitController {
     private JwtLoginUtils jwtLoginUtils;
 
     private static final String TEMP_PATH = System.getProperty("user.dir") + File.separator + "temp";
+    
+    /**
+     * 初始化方法，确保必要的目录存在
+     */
+    @PostConstruct
+    public void init() {
+        // 确保临时目录存在
+        if (!FileUtil.exist(TEMP_PATH)) {
+            FileUtil.mkdir(TEMP_PATH);
+        }
+    }
+    
     /**
      * 提交检测代码
      * @param submitRequest
@@ -41,6 +54,11 @@ public class QuestionSubmitController {
      */
     @PostMapping("/sub")
     public BaseResponse<String> submitQuestion(@RequestBody SubmitRequest submitRequest, @RequestHeader(value = "Accesstoken",required = false) String token) throws JsonProcessingException {
+        // 确保临时目录存在
+        if (!FileUtil.exist(TEMP_PATH)) {
+            FileUtil.mkdir(TEMP_PATH);
+        }
+        
         Long id = null;
         String userName = "";
         try {

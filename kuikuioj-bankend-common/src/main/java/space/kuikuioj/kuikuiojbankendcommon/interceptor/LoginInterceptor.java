@@ -71,6 +71,12 @@ public class LoginInterceptor implements HandlerInterceptor {
             throw new BusinessException(ErrorCode.FORBINDDEN_ERROR, "账号已过期，请重新登录");
         }
 
+        // 将 userId 和 userRole 存入 request attributes
+        Object userRoleObj = jwtResult.get("userRole");
+        String userRole = (userRoleObj != null) ? userRoleObj.toString() : "user"; // 默认为 "user"，或根据实际情况处理
+        request.setAttribute("currentUserId", userId);
+        request.setAttribute("currentUserRole", userRole);
+
         // Token 验证通过，继续处理请求
         return true;
     }

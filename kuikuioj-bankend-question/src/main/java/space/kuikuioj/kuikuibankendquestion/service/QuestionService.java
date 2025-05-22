@@ -7,6 +7,7 @@ import space.kuikuioj.kuikuiojbankendmodel.dto.QuestionRequest;
 import space.kuikuioj.kuikuiojbankendmodel.entity.Question;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionListVo;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionViewVo;
+import space.kuikuioj.kuikuiojbankendmodel.vo.TagCountVO;
 
 import java.util.List;
 
@@ -27,4 +28,10 @@ public interface QuestionService extends IService<Question> {
     Integer updateInfo(QuestionPostRequest questionPostRequest);
 
     List<Question> queryQuestions();
+
+    /**
+     * 获取数量最多的前4个题目标签及其数量
+     * @return List<TagCountVO>
+     */
+    List<TagCountVO> getTop4PopularTags();
 }

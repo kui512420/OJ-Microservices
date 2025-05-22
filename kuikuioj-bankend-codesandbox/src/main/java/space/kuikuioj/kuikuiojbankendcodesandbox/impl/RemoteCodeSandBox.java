@@ -54,6 +54,15 @@ public class RemoteCodeSandBox implements CodeSandBox {
             // 禁止第三方unsafe包
             Pattern.compile("sun\\.misc\\.Unsafe")
     );
+    
+    // 静态初始化块，确保临时目录存在
+    static {
+        // 确保临时目录存在
+        if (!FileUtil.exist(TEMP_PATH)) {
+            FileUtil.mkdir(TEMP_PATH);
+        }
+    }
+    
     /**
      * 检查代码是否包含危险操作
      * @param code 要检查的代码

@@ -16,6 +16,7 @@ import space.kuikuioj.kuikuiojbankendmodel.dto.QuestionRequest;
 import space.kuikuioj.kuikuiojbankendmodel.entity.Question;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionListVo;
 import space.kuikuioj.kuikuiojbankendmodel.vo.QuestionViewVo;
+import space.kuikuioj.kuikuiojbankendmodel.vo.TagCountVO;
 
 import java.io.IOException;
 import java.util.List;
@@ -127,5 +128,16 @@ public class QuestionController {
         questionPostRequest.setUserId(id);
         Integer count = questionService.updateInfo(questionPostRequest);
         return ResultUtils.success("更新题目成功",count);
+    }
+
+    /**
+     * 获取数量最多的前4个题目标签及其数量
+     *
+     * @return BaseResponse<List<TagCountVO>>
+     */
+    @GetMapping("/popularTags")
+    public BaseResponse<List<TagCountVO>> getTop4PopularTags() {
+        List<TagCountVO> popularTags = questionService.getTop4PopularTags();
+        return ResultUtils.success("获取成功", popularTags);
     }
 }
