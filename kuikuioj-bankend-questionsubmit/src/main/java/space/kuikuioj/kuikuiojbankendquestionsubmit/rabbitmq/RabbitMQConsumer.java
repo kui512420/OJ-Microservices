@@ -47,6 +47,7 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = {"code_queue"},ackMode = "MANUAL")
     public void consume(Message  message, Channel channel) {
         String msg = new String(message.getBody());
+        long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
             ExecuteCodeRequest executeCodeRequest = objectMapper.readValue(msg, ExecuteCodeRequest.class);
             // 使用远程代码沙箱
@@ -66,7 +67,6 @@ public class RabbitMQConsumer {
                     .eq("userId",userId)
                                 .eq("status", 2);
             boolean isFirst = questionSubmitMapper.selectCount(queryWrapper) == 0;
-            System.out.println(response.getStatus()+"sdsd");
             if (response.getStatus() == 2) {
                 // 更新执行的代码的状态
                 if(isFirst){
@@ -81,10 +81,35 @@ public class RabbitMQConsumer {
                 updateQuestionSubmitStatus(submitId,3);
             }
             updateJudgeInfo(submitId,judgeInfoList);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
+            log.error("RabbitMQ Consumer: IOException while processing message: '{}', error: {}", msg, e.getMessage(), e);
+            try {
+                channel.basicNack(deliveryTag, false, false); // deliveryTag, multiple, requeue=false
+            } catch (IOException nackException) {
+                log.error("RabbitMQ Consumer: IOException while nacking message after previous IOException: {}", nackException.getMessage(), nackException);
+            }
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error("RabbitMQ Consumer: InterruptedException while processing message: '{}', error: {}", msg, e.getMessage(), e);
+            try {
+                channel.basicNack(deliveryTag, false, false); // deliveryTag, multiple, requeue=false
+            } catch (IOException nackException) {
+                log.error("RabbitMQ Consumer: IOException while nacking message after InterruptedException: {}", nackException.getMessage(), nackException);
+            }
+            // Consider whether to rethrow or not. Rethrowing might trigger Spring AMQP's default error handling.
+            // For now, just logging and nacking. If Spring AMQP is configured with retries, this might still lead to retries.
+            // To ensure no retries from Spring AMQP level for this specific exception if it's wrapped,
+            // more complex error handling strategy might be needed.
+            // Thread.currentThread().interrupt(); // Restore interrupt status if appropriate
+            // throw new RuntimeException(e); // Original behavior
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            log.error("RabbitMQ Consumer: Unexpected exception while processing message: '{}', error: {}", msg, e.getMessage(), e);
+            try {
+                channel.basicNack(deliveryTag, false, false); // deliveryTag, multiple, requeue=false
+            } catch (IOException nackException) {
+                log.error("RabbitMQ Consumer: IOException while nacking message after unexpected exception: {}", nackException.getMessage(), nackException);
+            }
         }
     }
 

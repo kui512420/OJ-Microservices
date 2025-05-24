@@ -62,13 +62,6 @@ public class QuestionSubmitControllerInner {
 
     @GetMapping("/selectCount")
     public Long selectCount(@RequestParam Long userId , @RequestParam Long competitionId) {
-        HttpServletRequest request = getCurrentRequest();
-        String currentUserId = (String) request.getAttribute("currentUserId");
-        String currentUserRole = (String) request.getAttribute("currentUserRole");
-
-        if (!ADMIN_ROLE.equals(currentUserRole) && !userId.toString().equals(currentUserId)) {
-            throw new BusinessException(ErrorCode.NOT_AUTH_ERROR, "无权查看他人信息");
-        }
 
         QueryWrapper<QuestionSubmit> submitQueryWrapper = new QueryWrapper<>();
         submitQueryWrapper.eq("userId", userId);
@@ -78,13 +71,6 @@ public class QuestionSubmitControllerInner {
     }
     @GetMapping("/selectAcceptCount")
     public Long selectAcceptCount(@RequestParam Long userId , @RequestParam Long competitionId) {
-        HttpServletRequest request = getCurrentRequest();
-        String currentUserId = (String) request.getAttribute("currentUserId");
-        String currentUserRole = (String) request.getAttribute("currentUserRole");
-
-        if (!ADMIN_ROLE.equals(currentUserRole) && !userId.toString().equals(currentUserId)) {
-            throw new BusinessException(ErrorCode.NOT_AUTH_ERROR, "无权查看他人信息");
-        }
 
         QueryWrapper<QuestionSubmit> submitQueryWrapper = new QueryWrapper<>();
         submitQueryWrapper.eq("userId", userId);
@@ -153,12 +139,6 @@ public class QuestionSubmitControllerInner {
     }
     @GetMapping("/getCount")
     public Long getCount() {
-        HttpServletRequest request = getCurrentRequest();
-        String currentUserRole = (String) request.getAttribute("currentUserRole");
-
-        if (!ADMIN_ROLE.equals(currentUserRole)) {
-            throw new BusinessException(ErrorCode.NOT_AUTH_ERROR, "无权限访问此接口");
-        }
 
         // 查询未删除的用户数量
         QueryWrapper<QuestionSubmit> queryWrapper = new QueryWrapper<>();

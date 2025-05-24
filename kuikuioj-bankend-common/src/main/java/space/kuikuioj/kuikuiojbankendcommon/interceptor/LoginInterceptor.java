@@ -34,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     // 定义不需要拦截的路径
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
             "/api/user/login", "/api/user/register", "/api/user/captcha", "/api/user/email","/api/user/file/userheader"
-            ,"/api/user/rank","/api/submit","/api/question/inner/getCount"
+            ,"/api/user/rank","/api/submit","/api/question/inner"
     );
 
     @Override

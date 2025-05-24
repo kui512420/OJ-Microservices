@@ -1,0 +1,24 @@
+// 为默认沙箱环境设置非常严格的权限
+grant {
+    // 允许读取系统属性
+    permission java.util.PropertyPermission "java.version", "read";
+    permission java.util.PropertyPermission "java.vendor", "read";
+    permission java.util.PropertyPermission "java.vendor.url", "read";
+    permission java.util.PropertyPermission "java.class.version", "read";
+    permission java.util.PropertyPermission "os.name", "read";
+    permission java.util.PropertyPermission "os.version", "read";
+    permission java.util.PropertyPermission "os.arch", "read";
+    permission java.util.PropertyPermission "file.separator", "read";
+    permission java.util.PropertyPermission "path.separator", "read";
+    permission java.util.PropertyPermission "line.separator", "read";
+
+    // 允许Java运行时操作
+    permission java.lang.RuntimePermission "stopThread";
+    
+    // 允许退出程序，但限制退出代码
+    permission java.lang.RuntimePermission "exitVM.0";
+    
+    // 允许使用标准输入输出
+    permission java.lang.RuntimePermission "readFileDescriptor";
+    permission java.lang.RuntimePermission "writeFileDescriptor";
+}; 
