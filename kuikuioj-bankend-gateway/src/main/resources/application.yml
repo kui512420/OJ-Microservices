@@ -1,0 +1,103 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=0
+
+        - id: service-question
+          uri: lb://service-question
+          predicates:
+            - Path=/api/question/**
+          filters:
+            - StripPrefix=0
+
+        - id: service-questionsubmit
+          uri: lb://service-questionsubmit
+          predicates:
+            - Path=/api/submit/**
+          filters:
+            - StripPrefix=0
+
+        - id: service-competition
+          uri: lb://service-competition
+          predicates:
+            - Path=/api/competition/**
+          filters:
+            - StripPrefix=0
+            
+        - id: service-ai
+          uri: lb://service-ai
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - StripPrefix=0
+            
+        # 服务OpenAPI文档路由
+        - id: service-user-docs
+          uri: lb://service-user
+          predicates:
+            - Path=/api/user/v3/api-docs
+        
+        - id: service-question-docs
+          uri: lb://service-question
+          predicates:
+            - Path=/api/question/v3/api-docs
+        
+        - id: service-questionsubmit-docs
+          uri: lb://service-questionsubmit
+          predicates:
+            - Path=/api/submit/v3/api-docs
+        
+        - id: service-competition-docs
+          uri: lb://service-competition
+          predicates:
+            - Path=/api/competition/v3/api-docs
+        
+        - id: service-ai-docs
+          uri: lb://service-ai
+          predicates:
+            - Path=/api/ai/v3/api-docs
+        
+        # SwaggerUI路由
+        - id: swagger-ui
+          uri: lb://service-ai
+          predicates:
+            - Path=/swagger-ui/**
+        
+        - id: swagger-ui-html
+          uri: lb://service-ai
+          predicates:
+            - Path=/swagger-ui.html
+            - Path=/swagger-ui/index.html
+
+# springdoc配置
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    urls:
+      - url: /api/user/v3/api-docs
+        name: 用户服务
+      - url: /api/question/v3/api-docs
+        name: 题目服务
+      - url: /api/submit/v3/api-docs
+        name: 提交服务
+      - url: /api/competition/v3/api-docs
+        name: 竞赛服务
+      - url: /api/ai/v3/api-docs
+        name: AI服务
+  api-docs:
+    enabled: true

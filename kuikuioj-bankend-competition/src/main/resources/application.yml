@@ -1,0 +1,79 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /api/competition
+# spring
+spring:
+  application:
+    name: service-competition
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+    url: jdbc:mysql://localhost:3306/kuikuioj
+  ai:
+    openai:
+      base-url: https://api.deepseek.com
+      api-key: sk-f915a54104834ced9d47a554c91377e0
+      chat:
+        options:
+          model: deepseek-chat
+  mail:
+    host: smtp.qq.com
+    protocol: smtp
+    username: 3076749522@qq.com
+    password: dlcavisozykodfjb
+    default-encoding: utf-8
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  data:
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+# swagger配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: space.kuikuioj.kuikuiojbankendcompetition.controller
+
+mybatis-plus:
+  mapper-locations: classpath:space/kuikuioj/kuikuiojbankendcompetition/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: false
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete #
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+jwt:
+  sign: 512420
+  timeAccess: 2592000000

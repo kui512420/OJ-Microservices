@@ -1,0 +1,57 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /api/ai
+# spring 配置
+spring:
+  application:
+    name: service-ai
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+    url: jdbc:mysql://localhost:3306/kuikuioj
+  ai:
+    openai:
+      base-url: https://api.deepseek.com
+      api-key: sk-f915a54104834ced9d47a554c91377e0
+      chat:
+        options:
+          model: deepseek-chat
+        default-system-message: |
+          你是一个算法出题专家,题目要是中文，你能规范的写出一些OJ算法题目和对应的测试用例,输出格式是{"title": "题目2", "content": "000", "tags": "["测试", "题目"]", "judgeCase": "[{\"input\": \"1 2\", \"output\": \"3\"}]", "judgeConfig": "[{\"input\": \"1 2\", \"output\": \"3\"}]"},题目要是中文
+  data:
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
+
+# swagger配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: space.kuikuioj.kuikuiojbankendai.controller
+  default-flat-param-object: true
+  show-actuator: false
+  model-and-view-allowed: true
+  path-to-match: /*/**
+
+# jwt设置
+jwt:
+  sign: 512420
+  timeAccess: 2592000000
